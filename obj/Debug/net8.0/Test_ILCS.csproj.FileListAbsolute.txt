@@ -28,3 +28,4 @@ C:\DOT.NET\Test_ILCS\obj\Debug\net8.0\refint\Test_ILCS.dll
 C:\DOT.NET\Test_ILCS\obj\Debug\net8.0\Test_ILCS.pdb
 C:\DOT.NET\Test_ILCS\obj\Debug\net8.0\Test_ILCS.genruntimeconfig.cache
 C:\DOT.NET\Test_ILCS\obj\Debug\net8.0\ref\Test_ILCS.dll
+C:\DOT.NET\Test_ILCS\obj\Debug\net8.0\Test_ILCS.sourcelink.json

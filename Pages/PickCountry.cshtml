@@ -1,0 +1,87 @@
+@page
+@model PickCountryModel
+@{
+    ViewData["Title"] = "Test 1 Page";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="autocomplete">
+    <label>Negara</label>
+    <input type="text" id="negaraInput" class="autocomplete-input" placeholder="Fill the country">
+    <ul id="negaraAutocompleteList" class="autocomplete-list"></ul>
+</div>
+
+<div class="autocomplete">
+    <label>Pelabuhan</label>
+    <input type="text" id="pelabuhanInput" class="autocomplete-input" placeholder="Fill the port">
+    <ul id="pelabuhanAutocompleteList" class="autocomplete-list"></ul>
+</div>
+
+@section Scripts {
+    <script>
+        const negaraInput = document.getElementById('negaraInput');
+        const pelabuhanInput = document.getElementById('pelabuhanInput');
+        const negaraAutocompleteList = document.getElementById('negaraAutocompleteList');
+        const pelabuhanAutocompleteList = document.getElementById('pelabuhanAutocompleteList');
+
+        negaraInput.addEventListener('input', function () {
+            const inputText = this.value.trim();
+            if (inputText.length >= 3) {
+                fetchNegara(inputText);
+            } else {
+                clearAutocompleteOptions(negaraAutocompleteList);
+            }
+        });
+
+        pelabuhanInput.addEventListener('input', function () {
+            const inputText = this.value.trim();
+            if (inputText.length >= 3) {
+                const selectedNegara = negaraInput.value;
+                if (selectedNegara) {
+                    fetchPelabuhan(selectedNegara, inputText);
+                }
+            } else {
+                clearAutocompleteOptions(pelabuhanAutocompleteList);
+            }
+        });
+
+        async function fetchNegara(inputText) {
+            try {
+                const response = await fetch(`https://insw-dev.ilcs.co.id/n/negara?ur_negara=${inputText}`);
+                const data = await response.json();
+                const negaraOptions = data.map(country => country.nama_negara); // Adjust to match API data structure
+                displayAutocompleteOptions(negaraOptions, negaraAutocompleteList);
+            } catch (error) {
+                console.error('Error fetching negara:', error);
+            }
+        }
+
+        async function fetchPelabuhan(selectedNegara, inputText) {
+            try {
+                const response = await fetch(`https://insw-dev.ilcs.co.id/n/pelabuhan?kd_negara=${selectedNegara}&ur_pelabuhan=${inputText}`);
+                const data = await response.json();
+                const pelabuhanOptions = data.map(port => port.nama_pelabuhan); // Adjust to match API data structure
+                displayAutocompleteOptions(pelabuhanOptions, pelabuhanAutocompleteList);
+            } catch (error) {
+                console.error('Error fetching pelabuhan:', error);
+            }
+        }
+
+        function displayAutocompleteOptions(options, autocompleteList) {
+            autocompleteList.innerHTML = '';
+            options.forEach(option => {
+                const listItem = document.createElement('li');
+                listItem.textContent = option;
+                listItem.addEventListener('click', function () {
+                    autocompleteList.previousElementSibling.value = option;
+                    autocompleteList.innerHTML = '';
+                });
+                autocompleteList.appendChild(listItem);
+            });
+        }
+
+        function clearAutocompleteOptions(autocompleteList) {
+            autocompleteList.innerHTML = '';
+        }
+    </script>
+}

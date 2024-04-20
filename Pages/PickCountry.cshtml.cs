@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Test_ILCS.Pages;
 
-public class Test1Model : PageModel
+public class PickCountryModel : PageModel
 {
     private readonly ILogger<PrivacyModel> _logger;
 
-    public Test1Model(ILogger<PrivacyModel> logger)
+    public PickCountryModel(ILogger<PrivacyModel> logger)
     {
         _logger = logger;
     }
