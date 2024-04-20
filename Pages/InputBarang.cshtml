@@ -1,0 +1,43 @@
+@page
+@model InputBarangModel
+@{
+    ViewData["Title"] = "Test 2 Page";
+}
+<h1>@ViewData["Title"]</h1>
+
+<input type="text" id="productCodeInput" placeholder="input barang" style="margin-bottom: 10px;" name="productCode"
+    required>
+<br>
+<textarea id="productDataTextarea" rows="5" readonly></textarea>
+
+@section Scripts {
+    <script>
+        const productCodeInput = document.getElementById('productCodeInput');
+        const productDataTextarea = document.getElementById('productDataTextarea');
+
+        async function fetchProductData() {
+            const productCode = productCodeInput.value.trim();
+            if (productCode.length === 0) {
+                alert('Please enter a product code.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://insw-dev.ilcs.co.id/n/barang?hs_code=${productCode}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch product data.');
+                }
+
+                const data = await response.json();
+                const productData = JSON.stringify(data, null, 2); // Convert data to JSON string with indentation
+                productDataTextarea.value = productData;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching product data.');
+            }
+        }
+
+        // Call the fetchProductData function when the input field loses focus
+        productCodeInput.addEventListener('blur', fetchProductData);
+    </script>
+}
